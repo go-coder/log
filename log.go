@@ -3,7 +3,9 @@ package log
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"time"
 
@@ -106,19 +108,49 @@ func (l *rlog) output(msg string, kvList ...interface{}) {
 	os.Stderr.WriteString(str)
 }
 
+// kvList must be key-value pair
 func flatten(kvList ...interface{}) string {
+	dict := kvListToMap(kvList...)
+	keys := make([]string, 0, len(dict))
+	for k, _ := range dict {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	buf := strings.Builder{}
 	sep := ""
-	for i := 0; i < len(kvList); i += 2 {
+	// sortted flatten
+	for _, key := range keys {
 		buf.WriteString(sep)
 		sep = " "
-		buf.WriteString(kvList[i].(string))
+		buf.WriteString(key)
 		buf.WriteString("=")
-		buf.WriteString(pretty(kvList[i+1]))
+		buf.WriteString(pretty(dict[key]))
 	}
 	return buf.String()
 }
 
+// kvList must be key-value pair
+func kvListToMap(kvList ...interface{}) map[string]interface{} {
+	dict := make(map[string]interface{})
+	for i := 0; i < len(kvList); i += 2 {
+		key := kvList[i].(string)
+		value := kvList[i+1]
+		dict[key] = value
+	}
+	return dict
+}
+
 func pretty(v interface{}) string {
+	if _, ok := v.(error); ok {
+		return v.(error).Error()
+	}
+	if reflect.ValueOf(v).Kind() == reflect.Chan {
+		return "<chan?>"
+	}
+	if reflect.ValueOf(v).Kind() == reflect.Ptr {
+		v = reflect.Indirect(reflect.ValueOf(v)).Interface()
+	}
+
 	return fmt.Sprintf("%v", v)
 }
