@@ -4,10 +4,11 @@ import (
 	"errors"
 
 	"github.com/go-coder/log"
+	"github.com/go-coder/log/backend"
 )
 
 func main() {
-	logr := log.New()
+	logr := log.New(backend.Stderr())
 
 	logr.V(1).Info("msg", "uint", 112, "int", 211, "nil", nil)
 	var typedNil *int
