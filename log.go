@@ -2,7 +2,6 @@ package log
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"	
 
@@ -24,7 +23,6 @@ func New() logr.Logger {
 		level: 0,
 		name: "",
 		fields: make([]interface{}, 0),
-		logger: log.New(os.Stderr, "", log.LstdFlags),
 	}
 }
 
@@ -33,7 +31,6 @@ func (l *rlog) copy() *rlog {
 		level: l.level,
 		name: l.name,
 		fields: append(make([]interface{},0), l.fields),
-		logger: l.logger,
 	}
 }
 
@@ -41,7 +38,6 @@ type rlog struct {
 	level int
 	name string
 	fields []interface{}
-	logger *log.Logger
 }
 
 var _ logr.InfoLogger = (*rlog)(nil)
@@ -58,7 +54,12 @@ func (l *rlog) Info(msg string, kvList ...interface{}) {
 }
 
 func (l *rlog) Error(err error, msg string, kvList ...interface{}) {
-	log.Println(err, msg, kvList)
+	if err != nil {
+		kvList = append(kvList, "error", err.Error())
+	} else {
+		kvList = append(kvList, "error", "nil")
+	}
+	l.output(msg, kvList...)
 }
 
 func (l *rlog) V(level int) logr.InfoLogger {
@@ -88,7 +89,8 @@ func (l *rlog) output(msg string, kvList ...interface{}) {
 		panic("fields must be key-value pairs")
 	}
 	str := flatten(kvList...)
-	l.logger.Println(msg, str)
+	str = fmt.Sprintf("[%s] %s\n", msg, str)
+	os.Stderr.WriteString(str)
 }
 
 func flatten(kvList ...interface{}) string {
