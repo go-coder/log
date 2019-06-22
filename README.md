@@ -1,2 +1,10 @@
-# log
-A logr implementation using native log
+# 基本日志库
+
+# 设计思路
+
++ 实现 logr 接口
++ 直接使用 os.Stderr 输出到屏幕
++ 加入命令行参数来筛选 Info 级别
++ 打印日志必须的字段，包括：日志级别、时间日期、文件名、行号、prefix、message、key-value消息
++ 使用 key-value 形式输出日志，便于后续转为 json 等格式自动化处理
++ 传入指针时，自动取出数据打印
