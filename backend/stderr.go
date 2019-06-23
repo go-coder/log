@@ -9,19 +9,27 @@ import (
 	"github.com/go-coder/log"
 )
 
-func Stderr() log.Outputer {
+func Stderr() log.EntryWriter {
 	return &outter{}
 }
 
 type outter struct {
 }
 
-var _ log.Outputer = (*outter)(nil)
+var _ log.EntryWriter = (*outter)(nil)
 
-func (o *outter) Output(e *log.Entry) {
+func (o *outter) WriteEntry(e *log.Entry) {
 	str := fmt.Sprintf("I%d %s %s:%d %s [%s] %s\n",
-		e.Level, e.Time.Format("2006/1/2 15:04:05"), e.FileName, e.LineNum, e.Prefix, e.Message, flatten(e.Fields))
+		e.Level, e.Time.Format("2006/1/2 15:04:05"), shorten(e.FileName), e.LineNum, e.Prefix, e.Message, flatten(e.Fields))
 	os.Stderr.WriteString(str)
+}
+
+func shorten(fileName string) string {
+	index := strings.LastIndexByte(fileName, '/')
+	if index > 0 {
+		return fileName[index+1:]
+	}
+	return fileName
 }
 
 // flatten returns string of sortted key-value pair
