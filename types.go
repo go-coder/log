@@ -12,9 +12,8 @@ const (
 	ValueChan = "<?>"
 )
 
-type TypedValue struct {
-	Type  string
-	Value string
+type EntryWriter interface {
+	WriteEntry(*Entry)
 }
 
 type Entry struct {
@@ -25,4 +24,15 @@ type Entry struct {
 	Prefix   string
 	Message  string
 	Fields   map[string]*TypedValue
+	Error    *Error
+}
+
+type TypedValue struct {
+	Type  string
+	Value string
+}
+
+type Error struct {
+	Message    string
+	StackTrace string
 }
