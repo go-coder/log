@@ -6,12 +6,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-coder/log"
+	"github.com/go-coder/log/types"
 )
 
-func Stderr() log.EntryWriter {
+func Stderr() types.EntryWriter {
 	out := &outter{
-		entryChan: make(chan *log.Entry),
+		entryChan: make(chan *types.Entry),
 	}
 	go func() {
 		for e := range out.entryChan {
@@ -22,22 +22,22 @@ func Stderr() log.EntryWriter {
 }
 
 type outter struct {
-	entryChan chan *log.Entry
+	entryChan chan *types.Entry
 }
 
-var _ log.EntryWriter = (*outter)(nil)
+var _ types.EntryWriter = (*outter)(nil)
 
-func (o *outter) WriteEntry(e *log.Entry) {
+func (o *outter) WriteEntry(e *types.Entry) {
 	o.entryChan <- e
 }
 
-func doWrite(e *log.Entry) {
+func doWrite(e *types.Entry) {
 	var str string
 	if e.Level < 0 {
-		if e.Error != nil {
+		if e.Err != nil {
 			str = fmt.Sprintf("Er %s %s:%d %s [%s] %s\n   %s %s\n",
 				e.Time.Format("2006/1/2 15:04:05"), shorten(e.FileName), e.LineNum, e.Prefix, e.Message, flatten(e.Fields),
-				e.Error.Message, e.Error.StackTrace)
+				e.Err.Message, e.Err.StackTrace)
 		} else {
 			str = fmt.Sprintf("Er %s %s:%d %s [%s] %s\n",
 				e.Time.Format("2006/1/2 15:04:05"), shorten(e.FileName), e.LineNum, e.Prefix, e.Message, flatten(e.Fields))
@@ -58,7 +58,7 @@ func shorten(fileName string) string {
 }
 
 // flatten returns string of sortted key-value pair
-func flatten(dict map[string]*log.TypedValue) string {
+func flatten(dict map[string]*types.TypedValue) string {
 	keys := make([]string, 0, len(dict))
 	for k := range dict {
 		keys = append(keys, k)

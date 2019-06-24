@@ -1,4 +1,4 @@
-package log
+package types
 
 import (
 	"time"
@@ -24,7 +24,7 @@ type Entry struct {
 	Prefix   string
 	Message  string
 	Fields   map[string]*TypedValue
-	Error    *Error
+	Err      *ErrorRecord
 }
 
 type TypedValue struct {
@@ -32,7 +32,7 @@ type TypedValue struct {
 	Value string
 }
 
-type Error struct {
+type ErrorRecord struct {
 	Message    string
 	StackTrace string
 }
