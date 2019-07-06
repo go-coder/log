@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Use the Unofficial Bash Strict Mode (Unless You Looove Debugging) | Aaron Maxwell
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
+
+main() {
+	echo " > formating file ..."
+    for dir in . ./types ./frontend ./backend ./example; do
+        go fmt $dir/...
+    	golangci-lint run $dir/... 
+    done
+    echo " > building file ..."
+	go build -o ./bin/main ./example/main.go
+}
+
+main ${@:-}

@@ -2,7 +2,7 @@
 
 ## 功能介绍
 
-[`go-coder/logr`](https://github.com/go-coder/logr) 的一个基础实现方案。`go-coder/logr` 是 [`go-logr/logr`](https://github.com/go-logr/logr) 的一个分支，对于当前实现简单改动就能应用到 `go-logr/logr` 上。
+[`go-logr/logr`](https://github.com/go-logr/logr) 的一个基础实现方案。
 
 ## 设计思路
 
@@ -17,8 +17,9 @@
 
 + 远程日志：pubsub、 gRPC、HTTP网页 等形式
 + AB测试：同时运行新旧版本的程序，自动对比日志不同，从中发现可能存在的问题
++ 日志归集：将多个不同程序的日志汇总到一个地址进行分析
 
-## 竞争问题
+## 前端的竞争问题
 
 考虑两种使用场景：
 
@@ -40,7 +41,7 @@ go func() {
 }()
 ```
 
-1. logr.V / logr.WithName / logr.WithFields
+1. logr.V / logr.WithName / logr.WithValues
 
     实现的时候，都是在副本中进行的操作，只需要考虑 copy 函数是否有竞争问题即可。
 
@@ -57,3 +58,7 @@ go func() {
 ### 结论
 
 logr 通过 log 对象只读的方式避免了竞争问题。所有对 log 进行改变的操作都是在新生成的副本之上进行的，从而保证了不会发生竞争。
+
+## 后端竞争问题
+
+由后端自行控制，stderr 的竞争问题分析参见 [README.md](./backend/README.md)

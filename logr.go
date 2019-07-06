@@ -3,7 +3,7 @@ package log
 import (
 	"github.com/go-coder/log/backend"
 	"github.com/go-coder/log/frontend"
-	"github.com/go-coder/logr"
+	"github.com/go-logr/logr"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 
 	V          = syslog.V
 	WithName   = syslog.WithName
-	WithFields = syslog.WithFields
+	WithValues = syslog.WithValues
 	Info       = syslog.Info
 	Error      = syslog.Error
 )

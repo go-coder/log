@@ -8,8 +8,8 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/go-coder/logr"
 	"github.com/go-coder/log/types"
+	"github.com/go-logr/logr"
 	"github.com/spf13/pflag"
 )
 
@@ -75,7 +75,7 @@ func (l *rlog) WithName(name string) logr.Logger {
 	return out
 }
 
-func (l *rlog) WithFields(kvList ...interface{}) logr.Logger {
+func (l *rlog) WithValues(kvList ...interface{}) logr.Logger {
 	out := l.clone()
 	out.fields = append(out.fields, kvList...)
 	return out

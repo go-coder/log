@@ -10,7 +10,7 @@ import (
 func main() {
 	log.Info("yes I can call it directly")
 
-	logr := log.NewLogger(backend.Stderr()).WithName("test").WithFields("key", "value")
+	logr := log.NewLogger(backend.Stderr()).WithName("test").WithValues("key", "value")
 
 	logr.V(1).Info("msg", "uint", 112, "int", 211, "nil", nil)
 	var typedNil *int
