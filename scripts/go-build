@@ -9,7 +9,8 @@ main() {
 	echo " > formating file ..."
     for dir in . ./pkg ./example; do
         go fmt $dir/...
-    	golangci-lint run $dir/... 
+        golint $dir/...
+    	golangci-lint run $dir/... --disable errcheck
     done
     echo " > building file ..."
 	go build -o ./bin/main ./example/main.go

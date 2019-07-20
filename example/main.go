@@ -4,23 +4,27 @@ import (
 	"errors"
 
 	"github.com/go-coder/log"
-	backend "github.com/go-coder/log/pkg/impl/stderr"
+	"github.com/go-coder/log/pkg/impl/stderr"
 )
 
 func main() {
 	log.Info("yes I can call it directly")
 
-	logr := log.NewLogger(backend.Stderr()).WithName("test").WithValues("key", "value")
+	logr := log.NewLogger(stderr.New()).WithName("test").WithValues("key", "value")
 
-	logr.V(1).Info("msg", "uint", 112, "int", 211, "nil", nil)
-	var typedNil *int
-	logr.V(3).Info("msg", "float", 2.33, "typedNil", typedNil)
+	go func() {
+		logr.V(1).Info("msg", "uint", 112, "int", 211, "nil", nil)
+		var typedNil *int
+		logr.V(3).Info("msg", "float", 2.33, "typedNil", typedNil)
+	}()
 
 	err := errors.New("myerr")
 	logr.Error(err, "msggg", "map", map[string]int{"a": 12})
 
-	ch := make(chan int)
-	logr.Info("mmseg", "array", [...]int{1, 0, 2, 4}, "channel", ch)
+	go func() {
+		ch := make(chan int)
+		logr.Info("mmseg", "array", [...]int{1, 0, 2, 4}, "channel", ch)
+	}()
 
 	a := 3
 	err = errors.New("field err")

@@ -7,13 +7,19 @@ import (
 )
 
 var (
+	// log.NewLogger is the shortcut to api.New
 	NewLogger = api.New
 
-	syslog logr.Logger = NewLogger(stderr.Stderr())
+	syslog logr.Logger = NewLogger(stderr.New())
 
-	V          = syslog.V
-	WithName   = syslog.WithName
+	// log.V is the shortcut to syslog.V
+	V = syslog.V
+	// log.WithName is the shortcut to syslog.WithName
+	WithName = syslog.WithName
+	// log.WithValues is the shortcut to syslog.WithValues
 	WithValues = syslog.WithValues
-	Info       = syslog.Info
-	Error      = syslog.Error
+	// log.Info is the shortcut to syslog.Info
+	Info = syslog.Info
+	// log.Error is the shortcut to syslog.Error
+	Error = syslog.Error
 )
