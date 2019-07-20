@@ -62,3 +62,7 @@ logr 通过 log 对象只读的方式避免了竞争问题。所有对 log 进�
 ## 后端竞争问题
 
 由后端自行控制，stderr 的竞争问题分析参见 [README.md](https://github.com/go-coder/log/pkg/impl/stderr/README.md)
+
+## FAQ
+
+常见问题请参考 [issues](https://github.com/go-coder/log/issues/)
