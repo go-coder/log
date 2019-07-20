@@ -1,8 +1,8 @@
 # logr 后端设计
 
-logr 在设计的时候充分考虑了扩展性，可以添加多种不同的后端方案，方便日志打印和日志归集。只要实现了 [`types.go`](../types/types.go) 中定义的 [`EntryWriter`](../types/types.go#L15) 接口，就可以直接切换后端，而不必担心日志前端的兼容问题。
+logr 在设计的时候充分考虑了扩展性，可以添加多种不同的后端方案，方便日志打印和日志归集。只要实现了 [`types.go`](https://github.com/go-coder/log/pkg/api/types.go) 中定义的`EntryWriter`接口，就可以直接切换后端，而不必担心日志前端的兼容问题。
 
-这里，我们默认提供了 `stderr` 的[后端实现](./stderr.go)。
+这里，我们默认提供了 `stderr` 的[后端实现](https://github.com/go-coder/log/pkg/impl/stderr/stderr.go)。
 
 ## stderr 解决竞争的方案
 

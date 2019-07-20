@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/go-coder/log"
-	"github.com/go-coder/log/backend"
+	backend "github.com/go-coder/log/pkg/impl/stderr"
 )
 
 func main() {

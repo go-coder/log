@@ -1,15 +1,15 @@
 package log
 
 import (
-	"github.com/go-coder/log/backend"
-	"github.com/go-coder/log/frontend"
+	"github.com/go-coder/log/pkg/api"
+	"github.com/go-coder/log/pkg/impl/stderr"
 	"github.com/go-logr/logr"
 )
 
 var (
-	NewLogger = frontend.New
+	NewLogger = api.New
 
-	syslog logr.Logger = NewLogger(backend.Stderr())
+	syslog logr.Logger = NewLogger(stderr.Stderr())
 
 	V          = syslog.V
 	WithName   = syslog.WithName

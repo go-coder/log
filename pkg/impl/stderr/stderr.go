@@ -1,4 +1,4 @@
-package backend
+package stderr
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-coder/log/types"
+	"github.com/go-coder/log/pkg/api"
 )
 
-func Stderr() types.EntryWriter {
+func Stderr() api.EntryWriter {
 	out := &outter{
-		entryChan: make(chan *types.Entry),
+		entryChan: make(chan *api.Entry),
 	}
 	go func() {
 		for e := range out.entryChan {
@@ -22,16 +22,16 @@ func Stderr() types.EntryWriter {
 }
 
 type outter struct {
-	entryChan chan *types.Entry
+	entryChan chan *api.Entry
 }
 
-var _ types.EntryWriter = (*outter)(nil)
+var _ api.EntryWriter = (*outter)(nil)
 
-func (o *outter) WriteEntry(e *types.Entry) {
+func (o *outter) WriteEntry(e *api.Entry) {
 	o.entryChan <- e
 }
 
-func doWrite(e *types.Entry) {
+func doWrite(e *api.Entry) {
 	var str string
 	if e.Level < 0 {
 		if e.Err != nil {
@@ -58,7 +58,7 @@ func shorten(fileName string) string {
 }
 
 // flatten returns string of sortted key-value pair
-func flatten(dict map[string]*types.TypedValue) string {
+func flatten(dict map[string]*api.TypedValue) string {
 	keys := make([]string, 0, len(dict))
 	for k := range dict {
 		keys = append(keys, k)

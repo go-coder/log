@@ -7,7 +7,7 @@ IFS=$'\n\t'
 
 main() {
 	echo " > formating file ..."
-    for dir in . ./types ./frontend ./backend ./example; do
+    for dir in . ./pkg ./example; do
         go fmt $dir/...
     	golangci-lint run $dir/... 
     done
